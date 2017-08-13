@@ -14,50 +14,30 @@ public class Solution
 	
 	public IList<string> GenerateParenthesis(int n)
 	{
-		return GenerateParenthesis(n, n);
-	}
-	
-	public IList<string> GenerateParenthesis(int l, int r)
-	{
-		if (r == 0)
-		{
-			return new List<string>();
-		}
-		
 		var parens = new List<string>();
-
-		if (l > 0)
-		{
-			var left  = l - 1;
-			var options = GenerateParenthesis(left, r);
-
-			if (options.Count == 0)
-			{
-				parens.Add("(");
-			}
-			
-			foreach (var option in options)
-			{
-				parens.Add("(" + option);
-			}			
-		}
-
-		if (r > 0 && l < r)
-		{
-			var right = r - 1;
-			var options = GenerateParenthesis(l, right);
-
-			if (options.Count == 0)
-			{
-				parens.Add(")");
-			}
-
-			foreach (var option in options)
-			{
-				parens.Add(")" + option);
-			}
-		}
+		GenerateParenthesis(string.Empty, n, n, 2 * n, parens);
 		
 		return parens;
+	}
+	
+	public void GenerateParenthesis(string prefix, int l, int r, int max, IList<string> parens)
+	{
+		if (prefix.Length == max)
+		{
+			parens.Add(prefix);
+			return;
+		}
+
+		// Open Parens
+		if (l > 0)
+		{
+			GenerateParenthesis(prefix + "(", l - 1, r, max, parens);
+		}
+
+		// Close Parens
+		if (l < r && r > 0)
+		{
+			GenerateParenthesis(prefix + ")", l, r - 1, max, parens);
+		}
 	}
 }
